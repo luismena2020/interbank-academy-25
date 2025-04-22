@@ -1,0 +1,64 @@
+package leerArchivo;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+
+public class leerArchivo {
+	
+	
+
+
+	    public static void main(String[] args) {
+	        String archivoCSV = "C:\\Users\\lmena\\Downloads\\interbank-academy\\data.csv"; // ruta del archivo.
+	        
+	        
+	       //inicializando variables 
+	        double balanceFinal = 0.0;
+	        double mayorMonto = 0.0;
+	        int idMayorMonto = 0;
+	        int creditoCount = 0;
+	        int debitoCount = 0;
+
+	        try (BufferedReader br = new BufferedReader(new FileReader(archivoCSV))) {
+	            String linea;
+	            br.readLine(); // Saltar la cabecera del CSV
+
+	            //
+	            while ((linea = br.readLine()) != null) {
+	                String[] datos = linea.split(",");
+	                int id = Integer.parseInt(datos[0]);
+	                String tipo = datos[1];
+	                double monto = Double.parseDouble(datos[2]);
+
+	                // Calcular balance
+	                if (tipo.equals("Crédito")) {
+	                    balanceFinal += monto; //incrementa el monto
+	                    creditoCount++;
+	                } else if (tipo.equals("Débito")) {
+	                    balanceFinal -= monto;   //decrementa el monto
+	                    debitoCount++;
+	                }
+
+	                // Verificar transacción de mayor monto
+	                if (monto > mayorMonto) {
+	                    mayorMonto = monto;
+	                    idMayorMonto = id;
+	                }
+	            }
+
+	            // Imprimir el reporte
+	            System.out.println("Reporte de Transacciones");
+	            System.out.println("---------------------------------------------");
+	            System.out.println("Balance Final: " + balanceFinal);
+	            System.out.println("Transacción de Mayor Monto: ID " + idMayorMonto + " - " + mayorMonto);
+	            System.out.println("Conteo de Transacciones: Crédito: " + creditoCount + " Débito: " + debitoCount);
+
+	        } catch (IOException e) {
+	            System.out.println("Error al leer el archivo CSV: " + e.getMessage());
+	        }
+	    }
+	}
+
+
